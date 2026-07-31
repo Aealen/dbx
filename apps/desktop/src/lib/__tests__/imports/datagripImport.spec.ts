@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from "vitest";
 import type { SidebarLayout, SidebarOrderEntry } from "@/types/database";
-import { parseDataGripConnections, parseDataGripImport, type DataGripImportPayload } from "@/lib/imports/datagripImport";
+import { matchDataGripImportFiles, parseDataGripConnections, parseDataGripImport, type DataGripImportPayload } from "@/lib/imports/datagripImport";
 
 function payload(dataSources: string, dataSourcesLocal?: string, dbForestConfig?: string): DataGripImportPayload {
   return { format: "datagrip-import", dataSources, dataSourcesLocal, dbForestConfig };
@@ -231,5 +231,47 @@ describe("DataGrip connection import", () => {
 
     expect(parseDataGripConnections(importPayload)).toHaveLength(1);
     expect(parseDataGripImport(importPayload).layout).toBeUndefined();
+  });
+});
+
+describe("matchDataGripImportFiles", () => {
+  it("picks the three DataGrip config files by name regardless of order", () => {
+    const paths = ["C:/proj/.idea/db-forest-config.xml", "C:/proj/.idea/dataSources.local.xml", "C:/proj/.idea/dataSources.xml"];
+    expect(matchDataGripImportFiles(paths)).toEqual({
+      dataSources: "C:/proj/.idea/dataSources.xml",
+      local: "C:/proj/.idea/dataSources.local.xml",
+      forest: "C:/proj/.idea/db-forest-config.xml",
+    });
+  });
+
+  it("allows missing optional local and forest files", () => {
+    expect(matchDataGripImportFiles(["C:/proj/.idea/dataSources.xml"])).toEqual({
+      dataSources: "C:/proj/.idea/dataSources.xml",
+      local: undefined,
+      forest: undefined,
+    });
+  });
+
+  it("throws a coded error when dataSources.xml is not among the selected files", () => {
+    let caught: unknown;
+    try {
+      matchDataGripImportFiles(["C:/proj/other.xml", "C:/proj/dataSources.local.xml"]);
+    } catch (error) {
+      caught = error;
+    }
+    expect((caught as Error).message).toMatch(/dataSources\.xml/i);
+    expect((caught as Error & { code?: string }).code).toBe("DATAGRIP_IMPORT_MISSING_DATASOURCES");
+  });
+
+  it("matches file names case-insensitively", () => {
+    const result = matchDataGripImportFiles(["C:/proj/.idea/DataSources.XML", "C:/proj/.idea/datasources.local.xml"]);
+    expect(result.dataSources).toBe("C:/proj/.idea/DataSources.XML");
+    expect(result.local).toBe("C:/proj/.idea/datasources.local.xml");
+  });
+
+  it("handles Windows backslash paths", () => {
+    const result = matchDataGripImportFiles(["C:\\proj\\.idea\\dataSources.xml", "C:\\proj\\.idea\\dataSources.local.xml"]);
+    expect(result.dataSources).toBe("C:\\proj\\.idea\\dataSources.xml");
+    expect(result.local).toBe("C:\\proj\\.idea\\dataSources.local.xml");
   });
 });

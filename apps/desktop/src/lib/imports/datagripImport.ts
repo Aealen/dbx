@@ -525,6 +525,34 @@ export function parseDataGripConnections(payload: DataGripImportPayload): Connec
   return parseDataGripImport(payload).connections;
 }
 
+/**
+ * Pick DataGrip config file paths by name from a dialog multi-select list.
+ * `dataSources.xml` is required; `dataSources.local.xml` (usernames) and
+ * `db-forest-config.xml` (legacy group tree) are optional and stay undefined
+ * when not selected. Names are matched case-insensitively on both path styles.
+ */
+export function matchDataGripImportFiles(paths: string[]): {
+  dataSources: string;
+  local?: string;
+  forest?: string;
+} {
+  const fileName = (path: string) => (path.split(/[\\/]/).pop() ?? "").toLowerCase();
+  const find = (name: string) => paths.find((path) => fileName(path) === name.toLowerCase());
+  const dataSources = find("dataSources.xml");
+  if (!dataSources) {
+    // Library layer keeps a readable fallback message; UI layers translate the
+    // coded error (see readDataGripImportFile) instead of showing this raw text.
+    const error = new Error("Select dataSources.xml (required); optionally dataSources.local.xml and db-forest-config.xml");
+    (error as Error & { code?: string }).code = "DATAGRIP_IMPORT_MISSING_DATASOURCES";
+    throw error;
+  }
+  return {
+    dataSources,
+    local: find("dataSources.local.xml"),
+    forest: find("db-forest-config.xml"),
+  };
+}
+
 /** Returns a map of dedup key (name\0host\0port\0db) → DataGrip UUID for Keychain lookup. */
 export function getDataGripUuidMap(payload: DataGripImportPayload): Map<string, string> {
   const shared = parseDataSourcesXml(payload.dataSources);
