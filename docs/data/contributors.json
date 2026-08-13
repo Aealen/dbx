@@ -1,7 +1,7 @@
 {
   "repository": "t8y2/dbx",
-  "generatedAt": "2026-08-12T18:19:40.847Z",
-  "stars": 14289,
+  "generatedAt": "2026-08-12T18:59:54.845Z",
+  "stars": 14288,
   "contributors": [
     {
       "login": "t8y2",
@@ -16,7 +16,7 @@
       "login": "zipg",
       "avatarUrl": "https://avatars.githubusercontent.com/u/4047349?v=4",
       "profileUrl": "https://github.com/zipg",
-      "commits": 512,
+      "commits": 513,
       "mergedPullRequests": 513,
       "firstContributionAt": "2026-06-22T06:10:59Z",
       "latestContributionAt": "2026-08-12T18:10:52Z"
@@ -25,7 +25,7 @@
       "login": "eryajf",
       "avatarUrl": "https://avatars.githubusercontent.com/u/33259379?v=4",
       "profileUrl": "https://github.com/eryajf",
-      "commits": 143,
+      "commits": 145,
       "mergedPullRequests": 144,
       "firstContributionAt": "2026-06-08T11:45:45Z",
       "latestContributionAt": "2026-08-12T18:10:38Z"
@@ -274,6 +274,15 @@
       "latestContributionAt": "2026-08-04T05:02:31Z"
     },
     {
+      "login": "q396921921",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/37297228?v=4",
+      "profileUrl": "https://github.com/q396921921",
+      "commits": 9,
+      "mergedPullRequests": 9,
+      "firstContributionAt": "2026-07-20T13:41:21Z",
+      "latestContributionAt": "2026-08-12T18:12:10Z"
+    },
+    {
       "login": "aiLi0617",
       "avatarUrl": "https://avatars.githubusercontent.com/u/76681595?v=4",
       "profileUrl": "https://github.com/aiLi0617",
@@ -344,15 +353,6 @@
       "mergedPullRequests": 3,
       "firstContributionAt": "2026-05-11T05:22:15Z",
       "latestContributionAt": "2026-05-11T14:10:01Z"
-    },
-    {
-      "login": "q396921921",
-      "avatarUrl": "https://avatars.githubusercontent.com/u/37297228?v=4",
-      "profileUrl": "https://github.com/q396921921",
-      "commits": 6,
-      "mergedPullRequests": 9,
-      "firstContributionAt": "2026-07-20T13:41:21Z",
-      "latestContributionAt": "2026-08-12T18:12:10Z"
     },
     {
       "login": "dbin0123",
